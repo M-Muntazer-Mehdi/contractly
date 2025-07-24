@@ -197,7 +197,7 @@ const ApprovalList = () => {
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography sx={{ color: "text.secondary" }}>
-                {"Compony Approval" || "-"}
+                Compony Approval
               </Typography>
             </Box>
           </Box>
@@ -326,10 +326,14 @@ const ApprovalList = () => {
             >
               <MenuItem
                 onClick={() => {
-                  if (user?.role?.permissions?.delete_approvals) {
-                    handleDelete(menuState.row?._id); // Use menuState.row._id
-                    handleClose();
-                  }
+                    if (
+                      user?.role?.permissions?.delete_approvals &&
+                      menuState.row &&
+                      menuState.row._id
+                    ) {
+                      handleDelete(menuState.row._id);
+                      handleClose();
+                    }
                 }}
               >
                 Delete
