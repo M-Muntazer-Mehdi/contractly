@@ -22,16 +22,3 @@ jobs:
 
     - name: Build
       run: npm run build
-
-
-    - name: SSH Remote Commands
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        port: 22
-        script: |
-          cd /home/ubuntu/cns-frontend/revmap-cns
-
-          # Any other commands you need to run
