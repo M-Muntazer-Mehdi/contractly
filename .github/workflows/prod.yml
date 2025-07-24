@@ -1,0 +1,46 @@
+name: Deploy React App to EC2
+
+on:
+  push:
+    branches:
+      - main # Set this to your default branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '20' # Set this to your Node.js version
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
+
+    - name: Deploy to EC2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        port: 22
+        source: "dist/*" # or "build/*" depending on your setup
+        target: "/home/ubuntu/cns-frontend/revmap-cns"
+
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd /home/ubuntu/cns-frontend/revmap-cns
+
+          # Any other commands you need to run
